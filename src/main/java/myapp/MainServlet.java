@@ -8,8 +8,8 @@ public class MainServlet extends HttpServlet {
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
         resp.setContentType("text/plain");
-        resp.getWriter().println("{ \"name\": " + getCountryName(0) + " }");
-        resp.getWriter().println("{ \"image\": " + getCountryImage(0) + " }");
+        resp.getWriter().println("{ \"name\": \"" + getCountryName(0) +
+          "\", \"image\": \"" + getCountryImage(0) + "\" }");
     }
 
     /**
