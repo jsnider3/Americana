@@ -13,17 +13,30 @@ public class MainServlet extends HttpServlet {
     }
 
     /**
-     * Get the name of a country given it's unique ID.
-     */
-    private String getCountryName(int id) {
-      return "United States of America";
-    }
-
-    /**
      * Get a picture of a country given it's unique ID.
      */
     private String getCountryImage(int id) {
-      return
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/USA_orthographic.svg/220px-USA_orthographic.svg.png";
+      String url = "";
+      switch (id) {
+        default:
+          url =
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/USA_orthographic.svg/220px-USA_orthographic.svg.png";
+          break;
+      }
+      return url;
     }
+
+    /**
+     * Get the name of a country given it's unique ID.
+     */
+    private String getCountryName(int id) {
+      String country = "";
+      switch (id) {
+        default:
+          country = "United States of America";
+          break;
+      }
+      return country;
+    }
+
 }
