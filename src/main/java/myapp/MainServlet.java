@@ -14,19 +14,27 @@ public class MainServlet extends HttpServlet {
         if (countryStr != null) {
           try {
             int countryID = Integer.parseInt(countryStr);
-            resp.setContentType("text/plain");
-            resp.getWriter().println("{ \"name\": \"" +
-              getCountryName(countryID) + "\", \"image\": \"" +
-              getCountryImage(countryID) + "\" }");
             if (countryID < 0 || countryID >= NUM_COUNTRIES) {
-              resp.setStatus(400);
+              errorMessage(resp, "countryID not a valid ID.");
+            } else {
+              resp.setContentType("text/plain");
+              resp.getWriter().println("{ \"name\": \"" +
+                getCountryName(countryID) + "\", \"image\": \"" +
+                getCountryImage(countryID) + "\" }");
             }
           } catch (NumberFormatException ex) {
-            resp.setStatus(400);
+            errorMessage(resp, "countryID not a number.");
           }
         } else {
-          resp.setStatus(400);
+          errorMessage(resp, "countryID not provided.");
         }
+    }
+
+    private void errorMessage(HttpServletResponse resp, String msg)
+          throws IOException {
+      resp.setStatus(400);
+      resp.setContentType("text/plain");
+      resp.getWriter().println("{ \"message\": \"" + msg + "\" }");
     }
 
     /**
