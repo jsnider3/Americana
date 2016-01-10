@@ -4,6 +4,9 @@ import java.io.IOException;
 import javax.servlet.http.*;
 
 public class MainServlet extends HttpServlet {
+
+    final static int NUM_COUNTRIES = 197;
+
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
@@ -15,7 +18,14 @@ public class MainServlet extends HttpServlet {
             resp.getWriter().println("{ \"name\": \"" +
               getCountryName(countryID) + "\", \"image\": \"" +
               getCountryImage(countryID) + "\" }");
-          } catch (NumberFormatException ex) {}
+            if (countryID < 0 || countryID >= NUM_COUNTRIES) {
+              resp.setStatus(400);
+            }
+          } catch (NumberFormatException ex) {
+            resp.setStatus(400);
+          }
+        } else {
+          resp.setStatus(400);
         }
     }
 
