@@ -30,6 +30,15 @@ public class MainServlet extends HttpServlet {
         }
     }
 
+    @Override
+    public void doPost(HttpServletRequest req, HttpServletResponse resp)
+            throws IOException {
+      errorMessage(resp, "Not implemented yet.");
+    }
+
+    /**
+     * Write an error message to a servlet response.
+     */
     private void errorMessage(HttpServletResponse resp, String msg)
           throws IOException {
       resp.setStatus(400);

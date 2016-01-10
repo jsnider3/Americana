@@ -44,6 +44,8 @@
 
 </header>
 
+<!- ->
+
     <div class="page-content">
       <div class="wrap">
       <div class="post">
@@ -65,27 +67,50 @@
     </div>
     <script>
     "use strict";
-    var countryOneID = Math.floor(Math.random() * 196);
-    var countryTwoID = Math.floor(Math.random() * 195);
-    if (countryOneID == countryTwoID) {
-      countryTwoID = (countryTwoID + 1) % 195;
-    }
-    console.log(countryOneID + " " + countryTwoID);
+
+    var logResult = function(cmp, first, second) {
+      var url = "/main?cmp=" + cmp + "&first" + first +
+        "&second=" + second
+      console.log('$.post("' + url + '")')
+      $.post(url)
+      nextPair()
+    };
+
     var makeFigure = function(data) {
       console.log("Making figure");
-      return "<figure><img src='" + data.image + "' alt='" + data.name +
+      return "<figure ><img src='" + data.image + "' alt='" + data.name +
         "' /> <figcaption>" + data.name + "</figcaption> </figure>"
     };
-    console.log("Doing the thing.");
-    $(document).ready(function() {
+
+    var nextPair = function() {
+      var NUM_COUNTRIES = 197
+      var countryOneID = Math.floor(Math.random() * NUM_COUNTRIES);
+      var countryTwoID = Math.floor(Math.random() * (NUM_COUNTRIES - 1));
+      if (countryOneID == countryTwoID) {
+        countryTwoID = (countryTwoID + 1) % NUM_COUNTRIES;
+      }
+      console.log(countryOneID + " " + countryTwoID);
+      $('#countryOne').off()
+      $('#countryTwo').off()
       $.getJSON('/main?countryID=' + countryOneID, function(data) {
         console.log("updating country one");
         $('#countryOne').html(makeFigure(data));
+        $('#countryOne').click(function() {
+          logResult(-1, countryOneID, countryTwoID)
+        });
       });
       $.getJSON('/main?countryID=' + countryTwoID, function(data) {
         console.log("updating country two");
         $('#countryTwo').html(makeFigure(data));
+        $('#countryTwo').click(function() {
+          logResult(1, countryOneID, countryTwoID)
+        });
       });
+    };
+
+    console.log("Doing the thing.");
+    $(document).ready(function() {
+      nextPair();
     });
     </script>
 
