@@ -69,7 +69,7 @@
     "use strict";
 
     var logResult = function(cmp, first, second) {
-      var url = "/main?cmp=" + cmp + "&first" + first +
+      var url = "/results?cmp=" + cmp + "&first=" + first +
         "&second=" + second
       console.log('$.post("' + url + '")')
       $.post(url)
@@ -92,14 +92,14 @@
       console.log(countryOneID + " " + countryTwoID);
       $('#countryOne').off()
       $('#countryTwo').off()
-      $.getJSON('/main?countryID=' + countryOneID, function(data) {
+      $.getJSON('/countries?countryID=' + countryOneID, function(data) {
         console.log("updating country one");
         $('#countryOne').html(makeFigure(data));
         $('#countryOne').click(function() {
           logResult(-1, countryOneID, countryTwoID)
         });
       });
-      $.getJSON('/main?countryID=' + countryTwoID, function(data) {
+      $.getJSON('/countries?countryID=' + countryTwoID, function(data) {
         console.log("updating country two");
         $('#countryTwo').html(makeFigure(data));
         $('#countryTwo').click(function() {

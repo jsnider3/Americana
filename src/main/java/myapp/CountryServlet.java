@@ -3,9 +3,10 @@ package myapp;
 import java.io.IOException;
 import javax.servlet.http.*;
 
-public class MainServlet extends HttpServlet {
-
-    final static int NUM_COUNTRIES = 197;
+/**
+ * Provides information on countries.
+ */
+public class CountryServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -14,8 +15,8 @@ public class MainServlet extends HttpServlet {
         if (countryStr != null) {
           try {
             int countryID = Integer.parseInt(countryStr);
-            if (countryID < 0 || countryID >= NUM_COUNTRIES) {
-              errorMessage(resp, "countryID not a valid ID.");
+            if (countryID < 0 || countryID >= Common.NUM_COUNTRIES) {
+              Common.errorMessage(resp, "countryID not a valid ID.");
             } else {
               resp.setContentType("text/plain");
               resp.getWriter().println("{ \"name\": \"" +
@@ -23,27 +24,11 @@ public class MainServlet extends HttpServlet {
                 getCountryImage(countryID) + "\" }");
             }
           } catch (NumberFormatException ex) {
-            errorMessage(resp, "countryID not a number.");
+            Common.errorMessage(resp, "countryID not a number.");
           }
         } else {
-          errorMessage(resp, "countryID not provided.");
+          Common.errorMessage(resp, "countryID not provided.");
         }
-    }
-
-    @Override
-    public void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws IOException {
-      errorMessage(resp, "Not implemented yet.");
-    }
-
-    /**
-     * Write an error message to a servlet response.
-     */
-    private void errorMessage(HttpServletResponse resp, String msg)
-          throws IOException {
-      resp.setStatus(400);
-      resp.setContentType("text/plain");
-      resp.getWriter().println("{ \"message\": \"" + msg + "\" }");
     }
 
     /**
