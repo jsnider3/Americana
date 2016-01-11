@@ -68,9 +68,27 @@
     <script>
     "use strict";
 
+    var count = 0;
+    var start = new Date();
+
+    var getCountryCodes = function() {
+      var NUM_COUNTRIES = 197
+      var idOne = Math.floor(Math.random() * NUM_COUNTRIES);
+      var idTwo = Math.floor(Math.random() * (NUM_COUNTRIES - 1));
+      if (idOne == idTwo) {
+        idTwo = (idTwo + 1) % NUM_COUNTRIES;
+      }
+      return [idOne, idTwo]
+    };
+
     var logResult = function(cmp, first, second) {
+      count += 1
+      var now = new Date();
+      var timediff = now.getTime() - start.getTime();
+      start = now;
       var url = "/results?cmp=" + cmp + "&first=" + first +
-        "&second=" + second
+        "&second=" + second + "&count=" + count +
+        "&time=" + timediff;
       console.log('$.post("' + url + '")')
       $.post(url)
       nextPair()
@@ -83,9 +101,9 @@
     };
 
     var nextPair = function() {
-      var NUM_COUNTRIES = 197
-      var countryOneID = Math.floor(Math.random() * NUM_COUNTRIES);
-      var countryTwoID = Math.floor(Math.random() * (NUM_COUNTRIES - 1));
+      var countries = getCountryCodes()
+      var countryOneID = countries[0]
+      var countryTwoID = countries[1]
       if (countryOneID == countryTwoID) {
         countryTwoID = (countryTwoID + 1) % NUM_COUNTRIES;
       }
