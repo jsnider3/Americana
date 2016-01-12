@@ -2,6 +2,7 @@ package myapp;
 
 import java.io.IOException;
 import javax.servlet.http.*;
+import com.google.appengine.api.utils.SystemProperty;
 
 /**
  * Wrapper class for app-wide shared functionality.
@@ -19,6 +20,25 @@ public class Common {
       resp.setContentType("text/plain");
       resp.getWriter().println("{ \"message\": \"" + msg + "\" }");
     }
+
+    public static String getDatabaseURL() {
+      String url = null;
+      try {
+        if (SystemProperty.environment.value() ==
+            SystemProperty.Environment.Value.Production) {
+          // Load the class that provides the new "jdbc:google:mysql://" prefix.
+          Class.forName("com.mysql.jdbc.GoogleDriver");
+          url = "jdbc:google:mysql://americana-1185:worldpolice/results?user=root";
+        } else {
+          //TODO Debug.
+        }
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+      return url;
+    }
+
+
 
 }
 
