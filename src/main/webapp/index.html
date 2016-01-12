@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Americana</title>
+    <title>Americana - A Project to Crowdsource a Definition of Americanness.</title>
     <meta name="viewport" content="width=device-width initial-scale=1">
     <meta name="description" content="An attempt at a blog by someone who thinks Haskell is cool.">
     <link rel="canonical" href="//www.joshuasnider.com/update/2016/01/03/pandemonium/">
@@ -58,6 +58,7 @@
       <figcaption>Loading</figcaption>
     </figure>
     </div>
+    <p>OR</p>
     <div id="countryTwo">
     <figure>
       <img src='https://upload.wikimedia.org/wikipedia/commons/2/28/InternetSlowdown_Day.gif'
@@ -65,6 +66,8 @@
       <figcaption>Loading</figcaption>
     </figure>
     </div>
+    Images licensed from the Wikimedia Foundation under a
+      <a href="http://creativecommons.org/licenses/by-sa/3.0/">creative commons license.</a>.
     <script>
     "use strict";
 
@@ -94,10 +97,17 @@
       nextPair()
     };
 
-    var makeFigure = function(data) {
+    var makeFigure = function(data, first) {
       console.log("Making figure");
-      return "<figure ><img src='" + data.image + "' alt='" + data.name +
-        "' /> <figcaption>" + data.name + "</figcaption> </figure>"
+      var img = "<img src='" + data.image + "' alt='" + data.name + "' />"
+      var capt = "<figcaption>" + data.name + "</figcaption>";
+      var fig = "";
+      if (first) {
+        fig = "<figure>" + img + capt + "</figure>";
+      } else {
+        fig = "<figure>" + capt + img + "</figure>";
+      }
+      return fig;
     };
 
     var nextPair = function() {
@@ -112,14 +122,14 @@
       $('#countryTwo').off()
       $.getJSON('/countries?countryID=' + countryOneID, function(data) {
         console.log("updating country one");
-        $('#countryOne').html(makeFigure(data));
+        $('#countryOne').html(makeFigure(data, true));
         $('#countryOne').click(function() {
           logResult(-1, countryOneID, countryTwoID)
         });
       });
       $.getJSON('/countries?countryID=' + countryTwoID, function(data) {
         console.log("updating country two");
-        $('#countryTwo').html(makeFigure(data));
+        $('#countryTwo').html(makeFigure(data, false));
         $('#countryTwo').click(function() {
           logResult(1, countryOneID, countryTwoID)
         });
