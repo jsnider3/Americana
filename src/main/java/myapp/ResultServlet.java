@@ -28,7 +28,7 @@ public class ResultServlet extends HttpServlet {
           int time = Integer.parseInt(timeStr);
           String url = Common.getDatabaseURL();
           if (url == null) {
-            Common.errorMessage(resp, "Database connection error.");
+            Common.serverError(resp, "Database connection error.");
           } else {
             try {
               Connection conn = DriverManager.getConnection(url);
@@ -48,7 +48,7 @@ public class ResultServlet extends HttpServlet {
               }
             } catch (SQLException e) {
               e.printStackTrace();
-              Common.errorMessage(resp, "Database error.");
+              Common.serverError(resp, "Database error.");
             }
           }
         } catch (NumberFormatException ex) {

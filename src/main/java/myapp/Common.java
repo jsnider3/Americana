@@ -38,7 +38,15 @@ public class Common {
       return url;
     }
 
-
+    /**
+     * Write an HTTP-500 error message.
+     */
+    public static void serverError(HttpServletResponse resp, String msg)
+          throws IOException {
+      resp.setStatus(500);
+      resp.setContentType("text/plain");
+      resp.getWriter().println("{ \"message\": \"" + msg + "\" }");
+    }
 
 }
 
