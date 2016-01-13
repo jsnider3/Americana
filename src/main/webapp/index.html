@@ -77,8 +77,9 @@
       <figcaption>Loading</figcaption>
     </figure>
     </div>
-    Images licensed from the Wikimedia Foundation under a
-      <a href="http://creativecommons.org/licenses/by-sa/3.0/">creative commons license.</a>.
+    <button type="button" id="skipButton" style="height:30px;width:200px">Skip!</button>
+    <p>Images licensed from the Wikimedia Foundation under a
+      <a href="http://creativecommons.org/licenses/by-sa/3.0/">creative commons license.</a>.</p>
     <script>
     "use strict";
 
@@ -144,6 +145,9 @@
         $('#countryTwo').click(function() {
           logResult(1, countryOneID, countryTwoID)
         });
+      });
+      $('#skipButton').click(function() {
+          logResult(0, countryOneID, countryTwoID)
       });
     };
 

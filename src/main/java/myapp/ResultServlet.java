@@ -34,7 +34,7 @@ public class ResultServlet extends HttpServlet {
               Connection conn = DriverManager.getConnection(url);
               try {
                 String statement =
-                  "INSERT INTO results (ipaddr, cmp, first, second, count, time) VALUES (?, ?, ?, ?, ?, ?);";
+                  "INSERT INTO results (ipaddr, cmp, first, second, count, time, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?);";
                 PreparedStatement stmt = conn.prepareStatement(statement);
                 stmt.setString(1, req.getRemoteAddr());
                 stmt.setInt(2, cmp);
@@ -42,6 +42,7 @@ public class ResultServlet extends HttpServlet {
                 stmt.setInt(4, second);
                 stmt.setInt(5, count);
                 stmt.setInt(6, time);
+                stmt.setDouble(7, (double)System.currentTimeMillis());
                 int success = stmt.executeUpdate();
               } finally {
                 conn.close();
