@@ -132,6 +132,7 @@
       console.log(countryOneID + " " + countryTwoID);
       $('#countryOne').off()
       $('#countryTwo').off()
+      $('#skipButton').off()
       $.getJSON('/countries?countryID=' + countryOneID, function(data) {
         console.log("updating country one");
         $('#countryOne').html(makeFigure(data, true));
