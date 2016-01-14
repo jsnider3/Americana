@@ -123,25 +123,22 @@
     };
 
     var nextPair = function() {
-      var countries = getCountryCodes()
-      var countryOneID = countries[0]
-      var countryTwoID = countries[1]
-      if (countryOneID == countryTwoID) {
-        countryTwoID = (countryTwoID + 1) % NUM_COUNTRIES;
-      }
-      console.log(countryOneID + " " + countryTwoID);
       $('#countryOne').off()
       $('#countryTwo').off()
       $('#skipButton').off()
+      var countries = getCountryCodes()
+      var countryOneID = countries[0]
+      var countryTwoID = countries[1]
+      console.log(countryOneID + " " + countryTwoID);
       $.getJSON('/countries?countryID=' + countryOneID, function(data) {
-        console.log("updating country one");
+        console.log("updating country one with " + countryOneID);
         $('#countryOne').html(makeFigure(data, true));
         $('#countryOne').click(function() {
           logResult(-1, countryOneID, countryTwoID)
         });
       });
       $.getJSON('/countries?countryID=' + countryTwoID, function(data) {
-        console.log("updating country two");
+        console.log("updating country two with " + countryTwoID);
         $('#countryTwo').html(makeFigure(data, false));
         $('#countryTwo').click(function() {
           logResult(1, countryOneID, countryTwoID)
