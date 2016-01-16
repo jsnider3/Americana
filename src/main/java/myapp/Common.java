@@ -1,6 +1,7 @@
 package myapp;
 
 import java.io.IOException;
+import java.sql.*;
 import javax.servlet.http.*;
 import com.google.appengine.api.utils.SystemProperty;
 
@@ -26,11 +27,11 @@ public class Common {
       try {
         if (SystemProperty.environment.value() ==
             SystemProperty.Environment.Value.Production) {
-          // Load the class that provides the new "jdbc:google:mysql://" prefix.
           Class.forName("com.mysql.jdbc.GoogleDriver");
           url = "jdbc:google:mysql://americana-1185:worldpolice/results?user=root";
         } else {
-          //TODO Debug.
+          Class.forName("org.sqlite.JDBC");
+          url = "jdbc:sqlite:test.db";
         }
       } catch (Exception e) {
         e.printStackTrace();
@@ -41,11 +42,12 @@ public class Common {
     /**
      * Write an HTTP-500 error message.
      */
-    public static void serverError(HttpServletResponse resp, String msg)
-          throws IOException {
-      resp.setStatus(500);
-      resp.setContentType("text/plain");
-      resp.getWriter().println("{ \"message\": \"" + msg + "\" }");
+    public static void serverError(HttpServletResponse resp, String msg) {
+      try {
+        resp.setStatus(500);
+        resp.setContentType("text/plain");
+        resp.getWriter().println("{ \"message\": \"" + msg + "\" }");
+      } catch(IOException e) {}
     }
 
 }

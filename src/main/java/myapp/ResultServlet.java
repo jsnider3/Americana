@@ -26,31 +26,10 @@ public class ResultServlet extends HttpServlet {
           int second = Integer.parseInt(secondStr);
           int count = Integer.parseInt(countStr);
           int time = Integer.parseInt(timeStr);
-          String url = Common.getDatabaseURL();
-          if (url == null) {
-            Common.serverError(resp, "Database connection error.");
-          } else {
-            try {
-              Connection conn = DriverManager.getConnection(url);
-              try {
-                String statement =
-                  "INSERT INTO results (ipaddr, cmp, first, second, count, time, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?);";
-                PreparedStatement stmt = conn.prepareStatement(statement);
-                stmt.setString(1, req.getRemoteAddr());
-                stmt.setInt(2, cmp);
-                stmt.setInt(3, first);
-                stmt.setInt(4, second);
-                stmt.setInt(5, count);
-                stmt.setInt(6, time);
-                stmt.setDouble(7, (double)System.currentTimeMillis());
-                int success = stmt.executeUpdate();
-              } finally {
-                conn.close();
-              }
-            } catch (SQLException e) {
-              e.printStackTrace();
-              Common.serverError(resp, "Database error.");
-            }
+          String err = logResult(req.getRemoteAddr(), cmp, first, second,
+            count, time);
+          if (err != null) {
+            Common.serverError(resp, err);
           }
         } catch (NumberFormatException ex) {
           Common.errorMessage(resp, "Args not valid.");
@@ -58,6 +37,41 @@ public class ResultServlet extends HttpServlet {
       } else {
         Common.errorMessage(resp, "Missing required args.");
       }
+    }
+
+    /**
+     * Log the given result. Return an error message if necessary.
+     */
+    private String logResult(String ipaddr, int cmp, int first, int second,
+        int count, int time)
+    {
+      String url = Common.getDatabaseURL();
+      if (url == null) {
+        return "Database connection error.";
+      } else {
+        try {
+          Connection conn = DriverManager.getConnection(url);
+          try {
+            String statement =
+              "INSERT INTO results (ipaddr, cmp, first, second, count, time, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?);";
+            PreparedStatement stmt = conn.prepareStatement(statement);
+            stmt.setString(1, ipaddr);
+            stmt.setInt(2, cmp);
+            stmt.setInt(3, first);
+            stmt.setInt(4, second);
+            stmt.setInt(5, count);
+            stmt.setInt(6, time);
+            stmt.setDouble(7, (double)System.currentTimeMillis());
+            int success = stmt.executeUpdate();
+          } finally {
+            conn.close();
+          }
+        } catch (SQLException e) {
+          e.printStackTrace();
+          return "Database error.";
+        }
+      }
+      return null;
     }
 
 }
