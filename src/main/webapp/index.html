@@ -123,10 +123,15 @@
       return fig;
     };
 
-    var nextPair = function() {
+    var removeHandlers = function() {
       $('#countryOne').off()
       $('#countryTwo').off()
+      $('#passButton').off()
       $('#skipButton').off()
+    };
+
+    var nextPair = function() {
+      removeHandlers();
       var countries = getCountryCodes()
       var countryOneID = countries[0]
       var countryTwoID = countries[1]
