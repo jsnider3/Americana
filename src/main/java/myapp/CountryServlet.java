@@ -34,7 +34,7 @@ public class CountryServlet extends HttpServlet {
     /**
      * Get a picture of a country given it's unique ID.
      */
-    private String getCountryImage(int id) {
+    public String getCountryImage(int id) {
       String url = "";
       switch (id) {
         case 0: //Afghanistan
@@ -835,8 +835,8 @@ public class CountryServlet extends HttpServlet {
     /**
      * Get the name of a country given it's unique ID.
      */
-    private String getCountryName(int id) {
-      String country = "";
+    public String getCountryName(int id) {
+      String country = "Invalid country";
       switch (id) {
         case 0:
           country = "Afghanistan";
