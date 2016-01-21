@@ -1,9 +1,21 @@
 package myapp;
 
 import junit.framework.TestCase;
+import org.junit.Before;
+import java.io.File;
 import java.util.HashSet;
 
 public class BackendTest extends TestCase {
+
+  /**
+   * Make sure we don't have leftover data.
+   */
+  @Before
+  public void deleteData() {
+    try {
+      new File("test.db").delete();
+    } catch (Exception e){}
+  }
 
   /**
    * Test that are countries have unique images.
@@ -35,4 +47,13 @@ public class BackendTest extends TestCase {
     assertTrue(names.size() == Common.NUM_COUNTRIES);
     assertFalse(names.contains("Invalid country"));
   }
+
+  /**
+   * Test that we record results.
+   */
+  public void testLogResults() {
+    ResultServlet serve = new ResultServlet();
+    assertTrue(serve.makeTable());
+  }
+
 }

@@ -25,8 +25,7 @@ public class Common {
     public static String getDatabaseURL() {
       String url = null;
       try {
-        if (SystemProperty.environment.value() ==
-            SystemProperty.Environment.Value.Production) {
+        if (isProduction()) {
           Class.forName("com.mysql.jdbc.GoogleDriver");
           url = "jdbc:google:mysql://americana-1185:worldpolice/results?user=root";
         } else {
@@ -37,6 +36,14 @@ public class Common {
         e.printStackTrace();
       }
       return url;
+    }
+
+    /**
+     * Are we in a production environment?
+     */
+    public static boolean isProduction() {
+      return (SystemProperty.environment.value() ==
+            SystemProperty.Environment.Value.Production);
     }
 
     /**

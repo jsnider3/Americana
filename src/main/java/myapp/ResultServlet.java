@@ -42,7 +42,7 @@ public class ResultServlet extends HttpServlet {
     /**
      * Log the given result. Return an error message if necessary.
      */
-    private String logResult(String ipaddr, int cmp, int first, int second,
+    public String logResult(String ipaddr, int cmp, int first, int second,
         int count, int time)
     {
       String url = Common.getDatabaseURL();
@@ -72,6 +72,40 @@ public class ResultServlet extends HttpServlet {
         }
       }
       return null;
+    }
+
+    /**
+     * Create the table we will write things in.
+     */
+    public boolean makeTable() {
+      String url = Common.getDatabaseURL();
+      if (url == null) {
+        return false;
+      } else {
+        try {
+          Connection conn = DriverManager.getConnection(url);
+          try {
+            String statement = "CREATE TABLE results (" +
+              "ipaddr VARCHAR(30) NOT NULL, " +
+              "cmp INT NOT NULL, " +
+              "first INT NOT NULL, " +
+              "second INT NOT NULL, " +
+              "count INT NOT NULL, " +
+              "time INT NOT NULL, " +
+              "ruid INT PRIMARY KEY, " +
+              "timestamp double DEFAULT NULL);";
+            System.out.println(statement);
+            PreparedStatement stmt = conn.prepareStatement(statement);
+            int success = stmt.executeUpdate();
+          } finally {
+            conn.close();
+          }
+        } catch (SQLException e) {
+          e.printStackTrace();
+          return false;
+        }
+      }
+      return true;
     }
 
 }
