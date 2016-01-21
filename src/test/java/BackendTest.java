@@ -21,7 +21,7 @@ public class BackendTest {
   }
 
   /**
-   * Test that are countries have unique images.
+   * Test that our countries have unique images.
    */
   @Test
   public void testCountryURLs() {
@@ -37,7 +37,7 @@ public class BackendTest {
   }
 
   /**
-   * Test that are countries have unique names.
+   * Test that our countries have unique names.
    */
   @Test
   public void testCountryNames() {
