@@ -14,7 +14,13 @@ public class EloServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
-      //TODO
+      if (req.getHeader("X-Appengine-Cron") != null) {
+        resp.setContentType("text/plain");
+        resp.getWriter().println("{ \"status\": \"TODO Implement\"}");
+        //TODO
+      } else {
+        Common.errorMessage(resp, "Not authorized.");
+      }
     }
 
 }
