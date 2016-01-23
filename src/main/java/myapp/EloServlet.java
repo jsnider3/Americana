@@ -15,7 +15,7 @@ public class EloServlet extends HttpServlet {
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
       if (req.getHeader("X-Appengine-Cron") != null) {
-        resp.setContentType("text/plain");
+        resp.setContentType("application/json");
         resp.getWriter().println("{ \"status\": \"TODO Implement\"}");
         //TODO
       } else {

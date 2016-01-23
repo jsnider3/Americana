@@ -18,7 +18,7 @@ public class CountryServlet extends HttpServlet {
             if (countryID < 0 || countryID >= Common.NUM_COUNTRIES) {
               Common.errorMessage(resp, "countryID not a valid ID.");
             } else {
-              resp.setContentType("text/plain");
+              resp.setContentType("aplication/json");
               resp.getWriter().println("{ \"name\": \"" +
                 getCountryName(countryID) + "\", \"image\": \"" +
                 getCountryImage(countryID) + "\" }");

@@ -18,7 +18,7 @@ public class Common {
     public static void errorMessage(HttpServletResponse resp, String msg)
           throws IOException {
       resp.setStatus(400);
-      resp.setContentType("text/plain");
+      resp.setContentType("aplication/json");
       resp.getWriter().println("{ \"message\": \"" + msg + "\" }");
     }
 
@@ -52,7 +52,7 @@ public class Common {
     public static void serverError(HttpServletResponse resp, String msg) {
       try {
         resp.setStatus(500);
-        resp.setContentType("text/plain");
+        resp.setContentType("aplication/json");
         resp.getWriter().println("{ \"message\": \"" + msg + "\" }");
       } catch(IOException e) {}
     }

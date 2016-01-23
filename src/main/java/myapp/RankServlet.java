@@ -21,7 +21,7 @@ public class RankServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
-      resp.setContentType("text/plain");
+      resp.setContentType("application/json");
       resp.getWriter().print("{ \"updated\": " + getTimestamp() + ", \"countries\" : [");
       List<Map.Entry<String, Integer>> list = new LinkedList(getRankings().entrySet());
       Collections.sort(list, new Comparator() {
