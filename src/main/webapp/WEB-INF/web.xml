@@ -12,6 +12,10 @@
         <servlet-name>results</servlet-name>
         <servlet-class>myapp.ResultServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ranks</servlet-name>
+        <servlet-class>myapp.RankServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>countries</servlet-name>
         <url-pattern>/countries</url-pattern>
@@ -19,6 +23,10 @@
     <servlet-mapping>
         <servlet-name>results</servlet-name>
         <url-pattern>/results</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ranks</servlet-name>
+        <url-pattern>/ranks</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
