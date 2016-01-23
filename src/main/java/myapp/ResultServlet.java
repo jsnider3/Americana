@@ -2,6 +2,10 @@ package myapp;
 
 import java.io.*;
 import java.sql.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
 import javax.servlet.http.*;
 import com.google.appengine.api.utils.SystemProperty;
 
@@ -40,6 +44,25 @@ public class ResultServlet extends HttpServlet {
     }
 
     /**
+     * Import a dump file.
+     */
+    public void importFile(String filename) {
+      try {
+        List<String> lines = Files.readAllLines(Paths.get(filename),
+          StandardCharsets.UTF_8);
+        String file = lines.get(0);
+        file = file.substring(1, file.length() - 2);
+        for (String record : file.split("\\),\\(")) {
+          String[] fields = record.split(",");
+          logResult(fields[0], Integer.parseInt(fields[1]),
+            Integer.parseInt(fields[2]), Integer.parseInt(fields[3]),
+            Integer.parseInt(fields[4]), Integer.parseInt(fields[5]));
+          System.out.println(record);
+        }
+      } catch(Exception e) {}
+    }
+
+    /**
      * Log the given result. Return an error message if necessary.
      */
     public String logResult(String ipaddr, int cmp, int first, int second,
@@ -50,8 +73,7 @@ public class ResultServlet extends HttpServlet {
         return "Database connection error.";
       } else {
         try {
-          Connection conn = DriverManager.getConnection(url);
-          try {
+          try (Connection conn = DriverManager.getConnection(url)) {
             String statement =
               "INSERT INTO results (ipaddr, cmp, first, second, count, time, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?);";
             PreparedStatement stmt = conn.prepareStatement(statement);
@@ -63,8 +85,6 @@ public class ResultServlet extends HttpServlet {
             stmt.setInt(6, time);
             stmt.setDouble(7, (double)System.currentTimeMillis());
             int success = stmt.executeUpdate();
-          } finally {
-            conn.close();
           }
         } catch (SQLException e) {
           e.printStackTrace();
@@ -83,8 +103,7 @@ public class ResultServlet extends HttpServlet {
         return false;
       } else {
         try {
-          Connection conn = DriverManager.getConnection(url);
-          try {
+          try (Connection conn = DriverManager.getConnection(url)) {
             String statement = "CREATE TABLE results (" +
               "ipaddr VARCHAR(30) NOT NULL, " +
               "cmp INT NOT NULL, " +
@@ -94,11 +113,8 @@ public class ResultServlet extends HttpServlet {
               "time INT NOT NULL, " +
               "ruid INT PRIMARY KEY, " +
               "timestamp double DEFAULT NULL);";
-            System.out.println(statement);
             PreparedStatement stmt = conn.prepareStatement(statement);
-            int success = stmt.executeUpdate();
-          } finally {
-            conn.close();
+            stmt.executeUpdate();
           }
         } catch (SQLException e) {
           e.printStackTrace();

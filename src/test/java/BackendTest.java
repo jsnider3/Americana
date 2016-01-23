@@ -11,7 +11,7 @@ public class BackendTest {
   /**
    * Make sure we don't have leftover data.
    */
-  @Before
+  @After
   public void deleteData() {
     try {
       new File("test.db").delete();
@@ -60,6 +60,7 @@ public class BackendTest {
   public void testLogResults() {
     ResultServlet serve = new ResultServlet();
     assertTrue(serve.makeTable());
+    serve.importFile("datadump.txt");
   }
 
 }
