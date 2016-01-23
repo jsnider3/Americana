@@ -75,6 +75,15 @@ def run_elo():
     else:
       mapping.append((int(line), country))
   mapping = reversed(sorted(mapping))
+  mapping = ([(1776, "USA (United States of America")] +
+    [country for country in mapping if "USA" not in country[1]])
+  return mapping
+
+def print_elo_java(mapping):
+  for entry in mapping:
+    print('      ranks.put("' + entry[1] + '", ' + str(entry[0]) + ');')
+
+def print_elo_md(mapping):
   print('Rank | Country | Elo Rating')
   print('---- |   ----  | ----')
   index = 1
@@ -86,4 +95,4 @@ def run_elo():
 if __name__ == '__main__':
   make_csv()
   make_elo()
-  run_elo()
+  print_elo_java(run_elo())
