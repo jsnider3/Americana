@@ -5,6 +5,8 @@ import org.junit.After;
 import org.junit.Test;
 import java.io.File;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 
 public class BackendTest {
 
@@ -13,11 +15,11 @@ public class BackendTest {
    */
   @After
   public void deleteData() {
-    try {
+    /*try {
       new File("test.db").delete();
     } catch (Exception e) {
       e.printStackTrace();
-    }
+    }*/
   }
 
   /**
@@ -60,7 +62,17 @@ public class BackendTest {
   public void testLogResults() {
     ResultServlet serve = new ResultServlet();
     assertTrue(serve.makeTable());
-    serve.importFile("datadump.txt");
   }
 
+  /**
+   * Test that we calculate our own things correctly.
+   */
+  @Test
+  public void testElo() {
+    EloServlet serve = new EloServlet();
+    for (Map.Entry<String, Integer> ranking :
+        serve.sortRankings(serve.getRankings())) {
+      System.out.println(ranking.getKey() + " " + ranking.getValue());
+    }
+  }
 }
