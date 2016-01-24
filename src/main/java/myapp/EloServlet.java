@@ -22,13 +22,7 @@ public class EloServlet extends HttpServlet {
             throws IOException {
       resp.setContentType("application/json");
       resp.getWriter().print("{ \"updated\": " + getTimestamp() + ", \"countries\" : [");
-      List<Map.Entry<String, Integer>> list = new LinkedList(getRankings().entrySet());
-      Collections.sort(list, new Comparator() {
-            public int compare(Object o1, Object o2) {
-               return ((Comparable) ((Map.Entry) (o2)).getValue())
-              .compareTo(((Map.Entry) (o1)).getValue());
-            }
-       });
+      List<Map.Entry<String, Integer>> list = sortRankings(getRankings());
 
       for (Map.Entry<String, Integer> entry : list) {
         resp.getWriter().print("[\"" + entry.getKey() + "\", " + entry.getValue() + "]");
@@ -49,7 +43,7 @@ public class EloServlet extends HttpServlet {
       } else {
         try (Connection conn = DriverManager.getConnection(url)) {
           String statement =
-            "SELECT FROM results (cmp, first, second);";
+            "SELECT cmp, first, second FROM results;";
           Statement stmt = conn.createStatement();
           ResultSet rs = stmt.executeQuery(statement);
           while (rs.next()) {
@@ -95,11 +89,26 @@ public class EloServlet extends HttpServlet {
       for (Player<String> country : countries) {
         ranks.put(country.getID(), country.getRating());
       }
+      ranks.put(countries.get(187).getID(), 1776);
       return ranks;
     }
 
     public long getTimestamp() {
       return 1453525864169L;
+    }
+
+    /**
+     * Sort the rankings by score.
+     */
+    public List<Map.Entry<String, Integer>> sortRankings(Map<String, Integer> scores) {
+      List<Map.Entry<String, Integer>> list = new LinkedList(scores.entrySet());
+      Collections.sort(list, new Comparator() {
+            public int compare(Object o1, Object o2) {
+               return ((Comparable) ((Map.Entry) (o2)).getValue())
+              .compareTo(((Map.Entry) (o1)).getValue());
+            }
+       });
+      return list;
     }
 
 }
