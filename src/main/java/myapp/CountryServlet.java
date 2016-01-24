@@ -8,6 +8,8 @@ import javax.servlet.http.*;
  */
 public class CountryServlet extends HttpServlet {
 
+    static final int AMERICA = 187;
+
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {

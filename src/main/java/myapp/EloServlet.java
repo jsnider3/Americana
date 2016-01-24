@@ -17,20 +17,24 @@ import com.google.appengine.api.utils.SystemProperty;
  */
 public class EloServlet extends HttpServlet {
 
+    private long timestamp = 0;
+
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
-      resp.setContentType("application/json");
-      resp.getWriter().print("{ \"updated\": " + getTimestamp() + ", \"countries\" : [");
-      List<Map.Entry<String, Integer>> list = sortRankings(getRankings());
+      if (req.getHeader("X-Appengine-Cron") != null) {
+        resp.setContentType("application/json");
+        List<Map.Entry<String, Integer>> list = sortRankings(getRankings());
+        resp.getWriter().print("{ \"updated\": " + getTimestamp() + ", \"countries\" : [");
 
-      for (Map.Entry<String, Integer> entry : list) {
-        resp.getWriter().print("[\"" + entry.getKey() + "\", " + entry.getValue() + "]");
-        if (entry != list.get(list.size() - 1)) {
-          resp.getWriter().print(", ");
+        for (Map.Entry<String, Integer> entry : list) {
+          resp.getWriter().print("[\"" + entry.getKey() + "\", " + entry.getValue() + "]");
+          if (entry != list.get(list.size() - 1)) {
+            resp.getWriter().print(", ");
+          }
         }
+        resp.getWriter().println("]}");
       }
-      resp.getWriter().println("]}");
     }
 
     /**
@@ -43,13 +47,14 @@ public class EloServlet extends HttpServlet {
       } else {
         try (Connection conn = DriverManager.getConnection(url)) {
           String statement =
-            "SELECT cmp, first, second FROM results;";
+            "SELECT cmp, first, second, timestamp FROM results;";
           Statement stmt = conn.createStatement();
           ResultSet rs = stmt.executeQuery(statement);
           while (rs.next()) {
             int first = rs.getInt("first");
             int second = rs.getInt("second");
             int cmp = rs.getInt("cmp");
+            long time = rs.getInt("timestamp");
             Match.Outcomes result = null;
             switch (cmp) {
               case -1:
@@ -63,6 +68,9 @@ public class EloServlet extends HttpServlet {
                 break;
             }
             if (result != null) {
+              if (timestamp < time) {
+                timestamp = time;
+              }
               new Match(countries.get(first), countries.get(second),
                   result);
             }
@@ -89,12 +97,12 @@ public class EloServlet extends HttpServlet {
       for (Player<String> country : countries) {
         ranks.put(country.getID(), country.getRating());
       }
-      ranks.put(countries.get(187).getID(), 1776);
+      ranks.put(countries.get(CountryServlet.AMERICA).getID(), 1776);
       return ranks;
     }
 
     public long getTimestamp() {
-      return 1453525864169L;
+      return timestamp;
     }
 
     /**
