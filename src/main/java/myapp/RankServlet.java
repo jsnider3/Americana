@@ -1,5 +1,3 @@
-
-
 package myapp;
 
 import java.io.*;

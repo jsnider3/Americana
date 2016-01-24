@@ -72,20 +72,18 @@ public class ResultServlet extends HttpServlet {
       if (url == null) {
         return "Database connection error.";
       } else {
-        try {
-          try (Connection conn = DriverManager.getConnection(url)) {
-            String statement =
-              "INSERT INTO results (ipaddr, cmp, first, second, count, time, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?);";
-            PreparedStatement stmt = conn.prepareStatement(statement);
-            stmt.setString(1, ipaddr);
-            stmt.setInt(2, cmp);
-            stmt.setInt(3, first);
-            stmt.setInt(4, second);
-            stmt.setInt(5, count);
-            stmt.setInt(6, time);
-            stmt.setDouble(7, (double)System.currentTimeMillis());
-            int success = stmt.executeUpdate();
-          }
+        try (Connection conn = DriverManager.getConnection(url)) {
+          String statement =
+            "INSERT INTO results (ipaddr, cmp, first, second, count, time, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?);";
+          PreparedStatement stmt = conn.prepareStatement(statement);
+          stmt.setString(1, ipaddr);
+          stmt.setInt(2, cmp);
+          stmt.setInt(3, first);
+          stmt.setInt(4, second);
+          stmt.setInt(5, count);
+          stmt.setInt(6, time);
+          stmt.setDouble(7, (double)System.currentTimeMillis());
+          int success = stmt.executeUpdate();
         } catch (SQLException e) {
           e.printStackTrace();
           return "Database error.";
