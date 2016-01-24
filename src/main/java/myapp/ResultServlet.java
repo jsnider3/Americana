@@ -102,7 +102,7 @@ public class ResultServlet extends HttpServlet {
       } else {
         try {
           try (Connection conn = DriverManager.getConnection(url)) {
-            String statement = "CREATE TABLE results (" +
+            String statement = "CREATE TABLE IF NOT EXISTS results (" +
               "ipaddr VARCHAR(30) NOT NULL, " +
               "cmp INT NOT NULL, " +
               "first INT NOT NULL, " +
